@@ -1,0 +1,37 @@
+# pixi keeps the Python environment; these tasks run the tool in it. Options
+# go after the task name and are appended to the command, e.g.
+# `mise run detect photo.png --package 0603 --overlay out/photo.png`. A bare
+# --help is taken by mise itself; `mise run detect -- --help` reaches the tool.
+
+[tools]
+pixi = "0.66.0"
+
+[tasks.test]
+description = "Run the test suite"
+run = "pixi run python -m pytest -q --tb=short"
+
+[tasks.detect]
+description = "Fit a package to an image and print poses as JSON (--nozzle for nozzle mode)"
+run = "pixi run python -m epart_detect detect"
+
+[tasks.synth]
+description = "Render a synthetic scene with known poses (--truth writes them as JSON)"
+run = "pixi run python -m epart_detect synth"
+
+[tasks.packages]
+description = "List the package table"
+run = "pixi run python -m epart_detect packages"
+
+[tasks.bench]
+description = "Accuracy table on synthetic single parts, per package and px/mm (markdown)"
+run = "pixi run python -m epart_detect bench"
+
+[tasks.demo]
+description = "Render a group and a nozzle scene into out/ and write their overlays and JSON"
+run = [
+    "mkdir -p out",
+    "pixi run python -m epart_detect synth out/group.png --package SOT-23 --count 14 --seed 2 --truth out/group-truth.json",
+    "pixi run python -m epart_detect detect out/group.png --package SOT-23 --overlay out/group-overlay.png > out/group.json",
+    "pixi run python -m epart_detect synth out/nozzle.png --package 0603 --nozzle --scale 60 --size 480x360 --seed 4 --truth out/nozzle-truth.json",
+    "pixi run python -m epart_detect detect out/nozzle.png --package 0603 --nozzle --overlay out/nozzle-overlay.png > out/nozzle.json",
+]

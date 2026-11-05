@@ -1,0 +1,13 @@
+[workspace]
+authors = ["tmpk13 <167717442+tmpk13@users.noreply.github.com>"]
+channels = ["conda-forge"]
+name = "epart-detect"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[dependencies]
+python = ">=3.15.2,<3.16"
+numpy = ">=2.5.4,<3"
+scipy = ">=1.18.1,<2"
+opencv = ">=5.0.0,<6"
+pytest = ">=9.2.0,<10"
